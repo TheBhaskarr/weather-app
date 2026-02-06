@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Weatherly - Weather Forecast</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background 1s ease-in-out, color 1s ease-in-out;
+        }
+
+        /* --- Night Mode --- */
+        .night-mode {
+            background: linear-gradient(-45deg, #111827, #1e293b, #334155, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #e2e8f0; /* slate-200 */
+        }
+        .night-mode .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .night-mode .text-dynamic-primary { color: #ffffff; }
+        .night-mode .text-dynamic-secondary { color: #cbd5e1; } /* slate-300 */
+        .night-mode .text-dynamic-accent { color: #67e8f9; } /* cyan-300 */
+        .night-mode .search-bar {
+            background: rgba(31, 41, 55, 0.8); /* slate-800/80 */
+            border-color: #475569; /* slate-600 */
+        }
+        .night-mode .search-bar:focus { border-color: #22d3ee; } /* cyan-400 */
+        .night-mode .divider { border-color: #475569; } /* slate-600 */
+        .night-mode .theme-icon, .night-mode .location-btn { color: #f59e0b; }
+        .night-mode .favorite-btn.active { color: #f59e0b; }
+        .night-mode .favorite-btn { color: #94a3b8; }
+        .night-mode .favorite-city { background-color: rgba(71, 85, 105, 0.5); }
+        .night-mode .favorite-city:hover { background-color: rgba(71, 85, 105, 0.8); }
+
+        /* --- Day Mode --- */
+        .day-mode {
+            background: linear-gradient(-45deg, #87CEEB, #a8d5e2, #F0E68C, #87CEFA);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            color: #1e293b; /* slate-800 */
+        }
+        .day-mode .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .day-mode .text-dynamic-primary { color: #1e293b; } /* slate-800 */
+        .day-mode .text-dynamic-secondary { color: #475569; } /* slate-600 */
+        .day-mode .text-dynamic-accent { color: #0891b2; } /* cyan-600 */
+        .day-mode .search-bar {
+            background: rgba(255, 255, 255, 0.7);
+            border-color: #94a3b8; /* slate-400 */
+            color: #1e293b;
+        }
+        .day-mode .search-bar::placeholder { color: #475569; }
+        .day-mode .search-bar:focus { border-color: #0891b2; } /* cyan-600 */
+        .day-mode .divider { border-color: #cbd5e1; } /* slate-300 */
+        .day-mode .theme-icon, .day-mode .location-btn { color: #f59e0b; }
+        .day-mode .favorite-btn.active { color: #f59e0b; }
+        .day-mode .favorite-btn { color: #64748b; }
+        .day-mode .favorite-city { background-color: rgba(255, 255, 255, 0.4); }
+        .day-mode .favorite-city:hover { background-color: rgba(255, 255, 255, 0.7); }
+
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        .pop-in { animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; }
+
+        #currentIcon { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+
+        .rain::before {
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/NM8ZKQv.png');
+            animation: rain 0.5s linear infinite;
+            opacity: 0.4;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        @keyframes rain {
+            from { background-position: 0 0; }
+            to { background-position: 0 100px; }
+        }
+
+        @media (max-width: 640px) {
+            #appContainer { padding: 1rem; }
+        }
+
+        #suggestions {
+            background: white;
+            color: #111827; /* dark gray */
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        #suggestions div {
+            padding: 12px;
+            font-weight: 500;
+            color: #111827;
+            cursor: pointer;
+        }
+
+        #suggestions div:hover {
+            background: #e5e7eb;
+        }
+
+        .night-mode #suggestions {
+            background: #1f2937;
+            color: #f9fafb;
+        }
+
+        .night-mode #suggestions div:hover {
+            background: #374151;
+        }
+
+        .bg-clear { background: linear-gradient(#60a5fa,#93c5fd); }
+        .bg-rain { background: linear-gradient(#1f2937,#111827); }
+        .bg-cloud { background: linear-gradient(#9ca3af,#d1d5db); }
+
+        .active-suggestion {
+            background: #38bdf8;
+            color: white;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl mx-auto">
+        <!-- Logo and Title -->
+        <div class="text-center mb-6">
+            <div class="flex justify-center items-center gap-2 sm:gap-3">
+                <svg class="w-10 h-10 sm:w-12 sm:h-12 theme-icon transition-colors" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.25a5.25 5.25 0 100-10.5 5.25 5.25 0 000 10.5zM12 22.5a.75.75 0 01-.75-.75v-2.25a.75.75 0 011.5 0v2.25a.75.75 0 01-.75.75zM12 4.5a.75.75 0 01-.75-.75V1.5a.75.75 0 011.5 0v2.25A.75.75 0 0112 4.5zM5.47 6.53a.75.75 0 01-.53-1.28l1.6-1.6a.75.75 0 011.06 1.06l-1.6 1.6a.75.75 0 01-.53.22zM17.47 18.53a.75.75 0 01-.53-1.28l1.6-1.6a.75.75 0 111.06 1.06l-1.6 1.6a.75.75 0 01-.53.22zM22.5 12a.75.75 0 01-.75-.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM4.5 12a.75.75 0 01-.75-.75H1.5a.75.75 0 010-1.5h2.25A.75.75 0 014.5 12zM18.53 6.53a.75.75 0 01-.53-.22l-1.6-1.6a.75.75 0 011.06-1.06l1.6 1.6a.75.75 0 01-.53 1.28zM6.53 18.53a.75.75 0 01-.53-.22l-1.6-1.6a.75.75 0 111.06-1.06l1.6 1.6a.75.75 0 01-.53 1.28z"></path></svg>
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-dynamic-primary transition-colors">Weatherly</h1>
+            </div>
+            <p class="text-base sm:text-lg text-dynamic-secondary transition-colors mt-1">Your personal weather companion</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-8 flex justify-center">
+            <div class="relative w-full max-w-md">
+                <input
+                    type="text"
+                    id="cityInput"
+                    class="search-bar w-full border-2 rounded-full px-6 py-3 text-center text-lg"
+                    placeholder="Search for a city..."
+                >
+
+                <div id="suggestions"
+                     class="absolute left-0 top-full mt-2 w-full bg-white rounded-xl shadow-lg hidden z-50 max-h-60 overflow-y-auto">
+                </div>
+            </div>
+        </div>
+
+        <button id="locationBtn" class="hidden location-btn p-2 rounded-full hover:opacity-75 transition-opacity">
+            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+        </button>
+
+        <!-- Favorites Section -->
+        <div id="favoritesContainer" class="mb-8 text-center">
+            <div id="favoritesList" class="flex flex-wrap justify-center gap-2"></div>
+        </div>
+        
+        <!-- Main Container -->
+        <div id="appContainer" class="relative w-full glass-card rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 opacity-0 transition-opacity duration-500">
+            
+            <div class="absolute top-4 right-4 md:top-6 md:right-6 flex items-center gap-4">
+                <!-- Unit Toggle -->
+                <div class="flex items-center text-sm font-medium text-dynamic-secondary">
+                    <span id="unit-c" class="cursor-pointer">°C</span>
+                    <label for="unit-switch" class="relative inline-flex items-center cursor-pointer mx-2"><input type="checkbox" id="unit-switch" class="sr-only peer"><div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-cyan-600"></div></label>
+                    <span id="unit-f" class="cursor-pointer opacity-50">°F</span>
+                </div>
+                <!-- Day/Night Toggle -->
+                <div class="flex items-center">
+                    <span class="text-lg theme-icon transition-colors">☀️</span>
+                    <label for="theme-switch" class="relative inline-flex items-center cursor-pointer mx-2"><input type="checkbox" id="theme-switch" class="sr-only peer"><div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-cyan-600"></div></label>
+                    <span class="text-lg theme-icon transition-colors">🌙</span>
+                </div>
+            </div>
+
+            <div id="message" class="text-center text-yellow-400 mb-4 text-lg"></div>
+
+            <div id="loader" class="hidden flex justify-center py-10">
+              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500"></div>
+            </div>
+
+            <div id="weatherContent" class="hidden">
+                <div class="fade-in grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-center mb-8 pt-12 md:pt-0">
+                    <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                        <div class="flex items-center gap-3">
+                            <h1 id="cityName" class="text-4xl md:text-5xl font-extrabold text-dynamic-primary">--</h1>
+                            <button id="favoriteBtn" class="favorite-btn text-3xl transition-colors duration-300 hover:opacity-75"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></button>
+                        </div>
+                        <p id="localTime" class="text-lg text-dynamic-secondary font-medium mt-2">--:-- --</p>
+                        <p id="currentDescription" class="text-dynamic-secondary text-xl capitalize mt-1">--</p>
+                        <p id="currentTemp" class="text-5xl md:text-8xl font-extrabold text-dynamic-primary mt-4">--°</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img id="currentIcon" src="https://placehold.co/160x160/00000000/ffffff?text=☀️" alt="Weather icon" class="w-32 h-32 sm:w-40 sm:h-40">
+                        <div class="grid grid-cols-3 gap-4 text-center mt-4 w-full max-w-xs">
+                            <div><p class="text-sm text-dynamic-accent">Feels Like</p><p id="feelsLike" class="font-bold text-lg text-dynamic-primary">--°</p></div>
+                            <div><p class="text-sm text-dynamic-accent">Humidity</p><p id="humidity" class="font-bold text-lg text-dynamic-primary">--%</p></div>
+                            <div><p class="text-sm text-dynamic-accent">Wind</p><p id="windSpeed" class="font-bold text-lg text-dynamic-primary">--</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sunrise/Sunset -->
+                <div class="fade-in grid grid-cols-2 gap-4 text-center mb-8" style="animation-delay: 0.1s;">
+                    <div class="flex items-center justify-center gap-2">
+                        <svg class="w-8 h-8 theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <div>
+                            <p class="text-sm text-dynamic-accent">Sunrise</p>
+                            <p id="sunriseTime" class="font-bold text-lg text-dynamic-primary">--:--</p>
+                        </div>
+                    </div>
+                     <div class="flex items-center justify-center gap-2">
+                        <svg class="w-8 h-8 theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        <div>
+                            <p class="text-sm text-dynamic-accent">Sunset</p>
+                            <p id="sunsetTime" class="font-bold text-lg text-dynamic-primary">--:--</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-in" style="animation-delay: 0.2s;">
+                    <h3 class="text-xl font-bold mb-4 text-dynamic-primary border-b divider pb-2">5-Day Forecast</h3>
+                    <div id="forecastContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script defer src="config.js"></script>
+    <script defer src="script.js"></script>
+</body>
+</html>
