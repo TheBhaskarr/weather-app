@@ -6,7 +6,7 @@ This project demonstrates practical frontend development skills including API in
 
 ---
 
-## ✨ Features
+## Features
 
 ✅ Real-time weather data using OpenWeather API
 ✅ Smart city autocomplete suggestions
@@ -23,7 +23,7 @@ This project demonstrates practical frontend development skills including API in
 
 ---
 
-## 🧠 What This Project Demonstrates
+## What This Project Demonstrates
 
 This app highlights core frontend engineering skills:
 
@@ -37,7 +37,7 @@ This app highlights core frontend engineering skills:
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 * HTML5
 * CSS3 (custom + Tailwind utilities)
@@ -46,7 +46,7 @@ This app highlights core frontend engineering skills:
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 weather-app/
@@ -77,7 +77,7 @@ OR run with Live Server in VS Code.
 
 ---
 
-## 🔐 API Setup
+## API Setup
 
 This project uses OpenWeather API.
 
@@ -97,7 +97,7 @@ const CONFIG = {
 
 ---
 
-## 🌍 Future Improvements
+## Future Improvements
 
 * Geolocation weather auto-detect
 * Extended forecast charts
@@ -107,13 +107,13 @@ const CONFIG = {
 
 ---
 
-## 📸 Preview
+## Preview
 
 Modern UI with dynamic weather themes, smooth animations, and responsive layout designed for both desktop and mobile viewing.
 
 ---
 
-## 🤝 Contribution
+## Contribution
 
 Contributions are welcome!
 
@@ -125,15 +125,15 @@ If you'd like to improve UI, performance, or add features:
 
 ---
 
-## 👨‍💻 Author
+## Author
 
-Built with ❤️ by **Bhaskar Mishra**
+Built with ❤️ by **Bhaskar Mishra With Team Support** 
 
 Learning focus: frontend development, API integration, UI design, and real-world web app architecture.
 
 ---
 
-## ⭐ Support
+## Support
 
 If you found this project helpful:
 
@@ -143,10 +143,10 @@ If you found this project helpful:
 
 ---
 
-## 📜 License
+## License
 
 This project is open-source and available under the MIT License.
 
 ---
 
-### 🚀 Weatherly — Your personal weather companion
+### Weatherly — Your personal weather companion
