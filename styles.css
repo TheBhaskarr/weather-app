@@ -1,5 +1,6 @@
 /* ============================================
-   AI WEATHER PLANNER — Modern AI SaaS Stylesheet
+   WEATHERLY — Modern AI SaaS Stylesheet
+   Complete Unified File (Day-Mode Contrast Fix)
    ============================================ */
 
 /* --- Base & Reset --- */
@@ -16,45 +17,76 @@ body {
     transition: background 0.8s ease, color 0.8s ease;
 }
 
-/* --- Theme: Night Mode (Default) --- */
+/* =============================================
+   THEME: NIGHT MODE (Default)
+   ============================================= */
 .night-mode {
     background: linear-gradient(135deg, #0a0f1a 0%, #111827 30%, #1a1040 60%, #0f172a 100%);
     color: #e2e8f0;
 }
 
+/* =============================================
+   THEME: DAY MODE — High Contrast Fix
+   ============================================= */
 .day-mode {
-    background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 30%, #ede9fe 60%, #f0f9ff 100%);
-    color: #1e293b;
+    background: linear-gradient(135deg, #c7d9f0 0%, #b8d4f0 30%, #cfc5f0 60%, #b5daf5 100%);
+    color: #0f172a;
 }
 
 .day-mode .glass-card {
-    background: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .day-mode .navbar-glass {
-    background: rgba(255, 255, 255, 0.7);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 }
 
 .day-mode .nav-link {
-    color: #475569;
+    color: #334155;
 }
 
-.day-mode .nav-link:hover,
+.day-mode .nav-link:hover {
+    color: #0e7490;
+    background: rgba(8, 145, 178, 0.08);
+}
+
 .day-mode .nav-link.active {
-    color: #0891b2;
-    background: rgba(8, 145, 178, 0.1);
+    color: #0e7490;
+    background: rgba(8, 145, 178, 0.12);
 }
 
-.day-mode h1, .day-mode h2, .day-mode h3,
+/* --- Day Mode Typography (strong contrast) --- */
+.day-mode h1,
+.day-mode h2,
+.day-mode h3 {
+    color: #0f172a !important;
+}
+
 .day-mode .text-white {
+    color: #0f172a !important;
+}
+
+.day-mode .text-white\/80 {
     color: #1e293b !important;
 }
 
-.day-mode .text-white\/50,
-.day-mode .text-white\/40,
+.day-mode .text-white\/70 {
+    color: #334155 !important;
+}
+
 .day-mode .text-white\/60 {
+    color: #475569 !important;
+}
+
+.day-mode .text-white\/50 {
+    color: #475569 !important;
+}
+
+.day-mode .text-white\/40 {
     color: #64748b !important;
 }
 
@@ -62,77 +94,301 @@ body {
     color: #94a3b8 !important;
 }
 
-.day-mode .text-white\/80 {
-    color: #334155 !important;
+/* Keep accent / colored text visible in day mode */
+.day-mode .text-cyan-300 {
+    color: #0e7490 !important;
 }
 
+.day-mode .text-cyan-400 {
+    color: #0891b2 !important;
+}
+
+.day-mode .text-purple-400 {
+    color: #7c3aed !important;
+}
+
+.day-mode .text-amber-300,
+.day-mode .text-amber-300\/70 {
+    color: #b45309 !important;
+}
+
+.day-mode .text-amber-400 {
+    color: #d97706 !important;
+}
+
+.day-mode .text-emerald-400 {
+    color: #059669 !important;
+}
+
+.day-mode .text-blue-400 {
+    color: #2563eb !important;
+}
+
+.day-mode .text-blue-300 {
+    color: #3b82f6 !important;
+}
+
+.day-mode .text-rose-400 {
+    color: #e11d48 !important;
+}
+
+.day-mode .text-indigo-400 {
+    color: #4f46e5 !important;
+}
+
+.day-mode .text-teal-400 {
+    color: #0d9488 !important;
+}
+
+.day-mode .text-orange-400 {
+    color: #ea580c !important;
+}
+
+.day-mode .text-yellow-400 {
+    color: #ca8a04 !important;
+}
+
+/* --- Day Mode Forms --- */
 .day-mode .form-input {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
+.day-mode .form-input::placeholder {
+    color: #64748b;
+}
+
+.day-mode .form-input:focus {
+    border-color: #0891b2;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+}
+
+.day-mode select.form-input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='rgba(0,0,0,0.4)' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+}
+
+/* --- Day Mode Search Inputs --- */
+.day-mode #cityInput,
+.day-mode #homeSearchInput {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+}
+
+.day-mode #cityInput::placeholder,
+.day-mode #homeSearchInput::placeholder {
+    color: #64748b !important;
+}
+
+.day-mode #cityInput:focus,
+.day-mode #homeSearchInput:focus {
+    background: #fff !important;
+    border-color: #0891b2 !important;
+}
+
+/* --- Day Mode Search Icon --- */
+.day-mode .fa-search {
+    color: #64748b !important;
+}
+
+/* --- Day Mode Preference Tags --- */
+.day-mode .pref-tag {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: #94a3b8;
+    color: #334155;
+}
+
+.day-mode .pref-tag:hover {
+    border-color: #7c3aed;
+    color: #7c3aed;
+}
+
+.day-mode .pref-tag.active {
+    background: rgba(124, 58, 237, 0.1);
+    border-color: #7c3aed;
+    color: #7c3aed;
+}
+
+/* --- Day Mode Stat Card --- */
+.day-mode .stat-card {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+/* --- Day Mode Forecast Card --- */
+.day-mode .forecast-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.day-mode .forecast-card:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #0891b2;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Day Mode Suggestions Dropdown --- */
+.day-mode .suggestions-dropdown {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: #cbd5e1;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.day-mode .suggestion-item {
+    color: #1e293b;
+    border-bottom-color: #f1f5f9;
+}
+
+.day-mode .suggestion-item:hover,
+.day-mode .suggestion-item.suggestion-active {
+    background: #e0f2fe;
+    color: #0e7490;
+}
+
+/* --- Day Mode Confidence / Suitability Bars --- */
+.day-mode .confidence-bar,
+.day-mode .suitability-bar {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+/* --- Day Mode Tech Badges --- */
+.day-mode .tech-badge {
+    background: rgba(255, 255, 255, 0.7);
     border-color: #cbd5e1;
     color: #1e293b;
 }
 
-.day-mode .form-input::placeholder {
-    color: #94a3b8;
+.day-mode .tech-badge:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #94a3b8;
 }
 
-.day-mode .pref-tag {
-    background: rgba(255, 255, 255, 0.6);
+/* --- Day Mode Social Links --- */
+.day-mode .social-link {
+    background: rgba(255, 255, 255, 0.7);
     border-color: #cbd5e1;
-    color: #475569;
-}
-
-.day-mode .pref-tag.active {
-    background: rgba(8, 145, 178, 0.15);
-    border-color: #0891b2;
-    color: #0891b2;
-}
-
-.day-mode .stat-card {
-    background: rgba(255, 255, 255, 0.5);
-}
-
-.day-mode .tech-badge {
-    background: rgba(255, 255, 255, 0.6);
-    border-color: #e2e8f0;
     color: #334155;
 }
 
+.day-mode .social-link:hover {
+    background: #fff;
+    color: #0891b2;
+}
+
+/* --- Day Mode Mobile Menu --- */
 .day-mode .mobile-menu {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.97);
+    border-top-color: rgba(0, 0, 0, 0.06);
 }
 
 .day-mode .mobile-nav-link {
-    color: #475569;
+    color: #334155;
 }
 
+.day-mode .mobile-nav-link:hover,
 .day-mode .mobile-nav-link.active {
-    color: #0891b2;
-    background: rgba(8, 145, 178, 0.1);
+    color: #0e7490;
+    background: rgba(8, 145, 178, 0.08);
 }
 
-.day-mode .social-link {
+/* --- Day Mode Theme Toggle Button --- */
+.day-mode .theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: #cbd5e1;
+    color: #334155;
+}
+
+.day-mode .theme-toggle-btn:hover {
+    background: #fff;
+    color: #f59e0b;
+}
+
+/* --- Day Mode Secondary Button --- */
+.day-mode .btn-secondary {
+    color: #334155;
     background: rgba(255, 255, 255, 0.6);
+    border-color: #94a3b8;
+}
+
+.day-mode .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: #0f172a;
+}
+
+/* --- Day Mode Itinerary Cards --- */
+.day-mode .itinerary-day {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* --- Day Mode Loader --- */
+.day-mode .loader-spinner {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-top-color: #0891b2;
+}
+
+/* --- Day Mode Input Label --- */
+.day-mode .input-label {
     color: #475569;
 }
 
-.day-mode .suggestions-dropdown {
-    background: rgba(255, 255, 255, 0.95);
+/* --- Day Mode Unit Toggle --- */
+.day-mode #unit-c,
+.day-mode #unit-f {
+    color: #334155 !important;
 }
 
-.day-mode .suggestion-item:hover {
-    background: #f1f5f9;
+/* --- Day Mode Favorite City Tags --- */
+.day-mode #favoritesList button {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-color: #94a3b8 !important;
+    color: #1e293b !important;
 }
 
-.day-mode .confidence-bar {
-    background: rgba(0, 0, 0, 0.06);
+.day-mode #favoritesList button:hover {
+    background: rgba(255, 255, 255, 0.95) !important;
 }
 
-.day-mode .suitability-bar {
-    background: rgba(0, 0, 0, 0.06);
+/* --- Day Mode Favorite Star --- */
+.day-mode .favorite-btn {
+    color: #94a3b8 !important;
 }
 
-/* --- Navbar --- */
+.day-mode .favorite-btn:hover,
+.day-mode .favorite-btn.text-amber-400 {
+    color: #d97706 !important;
+}
+
+/* --- Day Mode Message Text --- */
+.day-mode #message {
+    color: #b45309 !important;
+}
+
+/* --- Day Mode Scrollbar --- */
+.day-mode ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.day-mode ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* --- Day Mode Selection --- */
+.day-mode ::selection {
+    background: rgba(8, 145, 178, 0.25);
+    color: #0f172a;
+}
+
+/* --- Day Mode Hamburger Icon --- */
+.day-mode .fa-bars {
+    color: #334155 !important;
+}
+
+/* =============================================
+   NAVBAR
+   ============================================= */
 .navbar-glass {
     background: rgba(10, 15, 26, 0.7);
     backdrop-filter: blur(20px);
@@ -181,10 +437,13 @@ body {
     color: #fbbf24;
 }
 
-/* Mobile Menu */
+/* =============================================
+   MOBILE MENU
+   ============================================= */
 .mobile-menu {
     background: rgba(10, 15, 26, 0.95);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     padding: 0.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -210,7 +469,9 @@ body {
     background: rgba(34, 211, 238, 0.1);
 }
 
-/* --- Glass Card --- */
+/* =============================================
+   GLASS CARD
+   ============================================= */
 .glass-card {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(20px);
@@ -223,7 +484,9 @@ body {
     border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* --- Page Sections --- */
+/* =============================================
+   PAGE SECTIONS (SPA)
+   ============================================= */
 .page-section {
     display: none;
     min-height: 100vh;
@@ -235,11 +498,19 @@ body {
 }
 
 @keyframes pageIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* --- Buttons --- */
+/* =============================================
+   BUTTONS
+   ============================================= */
 .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -281,7 +552,9 @@ body {
     transform: translateY(-2px);
 }
 
-/* --- Form Elements --- */
+/* =============================================
+   FORM ELEMENTS
+   ============================================= */
 .input-label {
     display: block;
     font-size: 0.75rem;
@@ -323,7 +596,9 @@ select.form-input {
     padding-right: 2.5rem;
 }
 
-/* --- Preference Tags --- */
+/* =============================================
+   PREFERENCE TAGS
+   ============================================= */
 .pref-tag {
     padding: 0.375rem 0.875rem;
     border-radius: 999px;
@@ -347,7 +622,9 @@ select.form-input {
     color: #c4b5fd;
 }
 
-/* --- Stat Card --- */
+/* =============================================
+   STAT CARD
+   ============================================= */
 .stat-card {
     display: flex;
     flex-direction: column;
@@ -358,18 +635,26 @@ select.form-input {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* --- Weather Icon Float --- */
+/* =============================================
+   WEATHER ICON FLOAT ANIMATION
+   ============================================= */
 .weather-icon-float {
     animation: iconFloat 3s ease-in-out infinite;
     filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
 }
 
 @keyframes iconFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
 }
 
-/* --- Loader --- */
+/* =============================================
+   LOADER SPINNER
+   ============================================= */
 .loader-spinner {
     width: 48px;
     height: 48px;
@@ -380,17 +665,23 @@ select.form-input {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-/* --- Chart Container --- */
+/* =============================================
+   CHART CONTAINER
+   ============================================= */
 .chart-container {
     position: relative;
     height: 280px;
     width: 100%;
 }
 
-/* --- Forecast Card --- */
+/* =============================================
+   FORECAST CARD
+   ============================================= */
 .forecast-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.06);
@@ -409,16 +700,19 @@ select.form-input {
 }
 
 @keyframes popIn {
-    from { opacity: 0; transform: scale(0.9) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0/* ============================================
-   CONTINUED — Remaining styles from styles.css
-   ============================================ */
-
-); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
-/* --- Hover Lift --- */
+/* =============================================
+   HOVER LIFT EFFECT
+   ============================================= */
 .hover-lift {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -428,18 +722,28 @@ select.form-input {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* --- Fade In Animation --- */
+/* =============================================
+   FADE IN ANIMATION
+   ============================================= */
 .fade-in {
     animation: fadeSlideIn 0.6s ease-out forwards;
     opacity: 0;
 }
 
 @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* --- Suggestions Dropdown --- */
+/* =============================================
+   SUGGESTIONS DROPDOWN
+   ============================================= */
 .suggestions-dropdown {
     position: absolute;
     left: 0;
@@ -448,6 +752,7 @@ select.form-input {
     z-index: 60;
     background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0.75rem;
     max-height: 260px;
@@ -474,7 +779,9 @@ select.form-input {
     color: #22d3ee;
 }
 
-/* --- Confidence / Suitability Bars --- */
+/* =============================================
+   CONFIDENCE / SUITABILITY BARS
+   ============================================= */
 .confidence-bar,
 .suitability-bar {
     width: 100%;
@@ -491,7 +798,9 @@ select.form-input {
     transition: width 1s ease;
 }
 
-/* --- Tech Badges (About Page) --- */
+/* =============================================
+   TECH BADGES (About Page)
+   ============================================= */
 .tech-badge {
     display: flex;
     align-items: center;
@@ -511,7 +820,9 @@ select.form-input {
     background: rgba(255, 255, 255, 0.06);
 }
 
-/* --- Social Links (About Page) --- */
+/* =============================================
+   SOCIAL LINKS (About Page)
+   ============================================= */
 .social-link {
     display: flex;
     align-items: center;
@@ -533,7 +844,9 @@ select.form-input {
     transform: translateY(-2px);
 }
 
-/* --- Itinerary Day Card --- */
+/* =============================================
+   ITINERARY DAY CARDS
+   ============================================= */
 .itinerary-day {
     animation: fadeSlideIn 0.4s ease forwards;
     opacity: 0;
@@ -546,10 +859,30 @@ select.form-input {
 .itinerary-day:nth-child(5) { animation-delay: 0.32s; }
 .itinerary-day:nth-child(6) { animation-delay: 0.40s; }
 .itinerary-day:nth-child(7) { animation-delay: 0.48s; }
+.itinerary-day:nth-child(8) { animation-delay: 0.56s; }
+.itinerary-day:nth-child(9) { animation-delay: 0.64s; }
+.itinerary-day:nth-child(10) { animation-delay: 0.72s; }
 
-/* --- Custom Scrollbar --- */
+/* =============================================
+   FAVORITE BUTTON
+   ============================================= */
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.15);
+}
+
+/* =============================================
+   CUSTOM SCROLLBAR
+   ============================================= */
 ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -565,22 +898,41 @@ select.form-input {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* --- Selection --- */
+/* =============================================
+   TEXT SELECTION
+   ============================================= */
 ::selection {
     background: rgba(34, 211, 238, 0.3);
     color: #fff;
 }
 
-/* ===================== RESPONSIVE ===================== */
+/* =============================================
+   UTILITY: GRADIENT TEXT HELPER
+   ============================================= */
+.gradient-text {
+    background: linear-gradient(135deg, #22d3ee, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 
-/* Tablet */
+/* =============================================
+   RESPONSIVE — TABLET (max-width: 1024px)
+   ============================================= */
 @media (max-width: 1024px) {
     .chart-container {
         height: 220px;
     }
+
+    .glass-card {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
 }
 
-/* Mobile */
+/* =============================================
+   RESPONSIVE — MOBILE (max-width: 640px)
+   ============================================= */
 @media (max-width: 640px) {
     .page-section {
         padding-top: 5rem;
@@ -589,10 +941,13 @@ select.form-input {
 
     #page-home h1 {
         font-size: 2.5rem !important;
+        line-height: 1.15;
     }
 
-    .btn-primary, .btn-secondary {
+    .btn-primary,
+    .btn-secondary {
         width: 100%;
+        justify-content: center;
     }
 
     .chart-container {
@@ -625,7 +980,7 @@ select.form-input {
         height: 100px !important;
     }
 
-    .grid.grid-cols-2.sm\\:grid-cols-4 {
+    .grid.grid-cols-2.sm\:grid-cols-4 {
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -637,19 +992,97 @@ select.form-input {
         font-size: 0.7rem;
         padding: 0.25rem 0.625rem;
     }
+
+    .tech-badge {
+        font-size: 0.7rem;
+        padding: 0.5rem 0.625rem;
+    }
+
+    .social-link {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+
+    .nav-link {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .input-label {
+        font-size: 0.7rem;
+    }
+
+    .form-input {
+        padding: 0.55rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .confidence-bar,
+    .suitability-bar {
+        height: 6px;
+    }
 }
 
-/* Extra small screens */
+/* =============================================
+   RESPONSIVE — EXTRA SMALL (max-width: 380px)
+   ============================================= */
 @media (max-width: 380px) {
     #page-home h1 {
         font-size: 2rem !important;
     }
 
-    .nav-link, .mobile-nav-link {
+    .nav-link,
+    .mobile-nav-link {
         font-size: 0.8rem;
     }
 
     .glass-card {
         border-radius: 1rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.8rem;
+    }
+
+    .stat-card i {
+        font-size: 0.75rem;
+    }
+
+    .stat-card p.text-lg {
+        font-size: 0.95rem;
+    }
+}
+
+/* =============================================
+   PRINT STYLES
+   ============================================= */
+@media print {
+    .navbar-glass,
+    .theme-toggle-btn,
+    .mobile-menu,
+    #locationBtn,
+    .btn-primary,
+    .btn-secondary,
+    .favorite-btn {
+        display: none !important;
+    }
+
+    body {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .glass-card {
+        background: #fff !important;
+        border: 1px solid #e2e8f0 !important;
+        backdrop-filter: none !important;
+    }
+
+    .page-section {
+        display: block !important;
+        break-inside: avoid;
     }
 }
