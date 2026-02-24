@@ -2,121 +2,677 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Weatherly - Weather Forecast</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weatherly — Smart Forecasting & AI Trip Planning</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="night-mode">
 
-    <div class="w-full max-w-4xl mx-auto">
-        <!-- Logo and Title -->
-        <div class="text-center mb-6">
-            <div class="flex justify-center items-center gap-2 sm:gap-3">
-                <svg class="w-10 h-10 sm:w-12 sm:h-12 theme-icon transition-colors" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.25a5.25 5.25 0 100-10.5 5.25 5.25 0 000 10.5zM12 22.5a.75.75 0 01-.75-.75v-2.25a.75.75 0 011.5 0v2.25a.75.75 0 01-.75.75zM12 4.5a.75.75 0 01-.75-.75V1.5a.75.75 0 011.5 0v2.25A.75.75 0 0112 4.5zM5.47 6.53a.75.75 0 01-.53-1.28l1.6-1.6a.75.75 0 011.06 1.06l-1.6 1.6a.75.75 0 01-.53.22zM17.47 18.53a.75.75 0 01-.53-1.28l1.6-1.6a.75.75 0 111.06 1.06l-1.6 1.6a.75.75 0 01-.53.22zM22.5 12a.75.75 0 01-.75-.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM4.5 12a.75.75 0 01-.75-.75H1.5a.75.75 0 010-1.5h2.25A.75.75 0 014.5 12zM18.53 6.53a.75.75 0 01-.53-.22l-1.6-1.6a.75.75 0 011.06-1.06l1.6 1.6a.75.75 0 01-.53 1.28zM6.53 18.53a.75.75 0 01-.53-.22l-1.6-1.6a.75.75 0 111.06-1.06l1.6 1.6a.75.75 0 01-.53 1.28z"></path></svg>
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-dynamic-primary transition-colors">Weatherly</h1>
-            </div>
-            <p class="text-base sm:text-lg text-dynamic-secondary transition-colors mt-1">Your personal weather companion</p>
-        </div>
+    <!-- ===================== NAVIGATION BAR ===================== -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 navbar-glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center">
+                        <i class="fas fa-cloud-sun text-white text-lg"></i>
+                    </div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                        Weatherly
+                    </span>
+                </div>
 
-        <!-- Search Bar -->
-        <div class="mb-8 flex justify-center">
-            <div class="relative w-full max-w-md">
-                <input
-                    type="text"
-                    id="cityInput"
-                    class="search-bar w-full border-2 rounded-full px-6 py-3 text-center text-lg"
-                    placeholder="Search for a city..."
-                >
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-1">
+                    <button class="nav-link active" data-page="home" onclick="navigateTo('home')">
+                        <i class="fas fa-home mr-1.5"></i> Home
+                    </button>
+                    <button class="nav-link" data-page="weather" onclick="navigateTo('weather')">
+                        <i class="fas fa-cloud-sun-rain mr-1.5"></i> Weather Forecast
+                    </button>
+                    <button class="nav-link" data-page="trip" onclick="navigateTo('trip')">
+                        <i class="fas fa-route mr-1.5"></i> AI Trip Planner
+                    </button>
+                    <button class="nav-link" data-page="dashboard" onclick="navigateTo('dashboard')">
+                        <i class="fas fa-chart-line mr-1.5"></i> Dashboard
+                    </button>
+                    <button class="nav-link" data-page="about" onclick="navigateTo('about')">
+                        <i class="fas fa-info-circle mr-1.5"></i> About
+                    </button>
+                </div>
 
-                <div id="suggestions"
-                     class="absolute left-0 top-full mt-2 w-full bg-white rounded-xl shadow-lg hidden z-50 max-h-60 overflow-y-auto">
+                <!-- Theme Toggle + Mobile Hamburger -->
+                <div class="flex items-center gap-3">
+                    <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                    </button>
+                    <button class="md:hidden text-white/80 hover:text-white" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <button id="locationBtn" class="hidden location-btn p-2 rounded-full hover:opacity-75 transition-opacity">
-            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
-        </button>
-
-        <!-- Favorites Section -->
-        <div id="favoritesContainer" class="mb-8 text-center">
-            <div id="favoritesList" class="flex flex-wrap justify-center gap-2"></div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden hidden mobile-menu">
+            <button class="mobile-nav-link active" data-page="home" onclick="navigateTo('home')">
+                <i class="fas fa-home mr-2"></i> Home
+            </button>
+            <button class="mobile-nav-link" data-page="weather" onclick="navigateTo('weather')">
+                <i class="fas fa-cloud-sun-rain mr-2"></i> Weather Forecast
+            </button>
+            <button class="mobile-nav-link" data-page="trip" onclick="navigateTo('trip')">
+                <i class="fas fa-route mr-2"></i> AI Trip Planner
+            </button>
+            <button class="mobile-nav-link" data-page="dashboard" onclick="navigateTo('dashboard')">
+                <i class="fas fa-chart-line mr-2"></i> Dashboard
+            </button>
+            <button class="mobile-nav-link" data-page="about" onclick="navigateTo('about')">
+                <i class="fas fa-info-circle mr-2"></i> About
+            </button>
         </div>
-        
-        <!-- Main Container -->
-        <div id="appContainer" class="relative w-full glass-card rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 opacity-0 transition-opacity duration-500">
-            
-            <div class="absolute top-4 right-4 md:top-6 md:right-6 flex items-center gap-4">
-                <!-- Unit Toggle -->
-                <div class="flex items-center text-sm font-medium text-dynamic-secondary">
-                    <span id="unit-c" class="cursor-pointer">°C</span>
-                    <label for="unit-switch" class="relative inline-flex items-center cursor-pointer mx-2"><input type="checkbox" id="unit-switch" class="sr-only peer"><div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-cyan-600"></div></label>
-                    <span id="unit-f" class="cursor-pointer opacity-50">°F</span>
+    </nav>
+
+    <!-- ===================== PAGE: HOME ===================== -->
+    <section id="page-home" class="page-section active pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Hero Section -->
+            <div class="text-center mb-16 fade-in">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-sm text-cyan-300 mb-6">
+                    <i class="fas fa-sparkles"></i> AI-Powered Weather Intelligence
                 </div>
-                <!-- Day/Night Toggle -->
-                <div class="flex items-center">
-                    <span class="text-lg theme-icon transition-colors">☀️</span>
-                    <label for="theme-switch" class="relative inline-flex items-center cursor-pointer mx-2"><input type="checkbox" id="theme-switch" class="sr-only peer"><div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-cyan-600"></div></label>
-                    <span class="text-lg theme-icon transition-colors">🌙</span>
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight">
+                    Smart Weather.<br>
+                    <span class="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">
+                        Smarter Trips.
+                    </span>
+                </h1>
+                <p class="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10">
+                    Weatherly combines AI-powered weather forecasting with intelligent trip planning. Get real-time weather insights and let our AI plan your perfect trip.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="navigateTo('weather')" class="btn-primary">
+                        <i class="fas fa-cloud-sun mr-2"></i> Check Weather
+                    </button>
+                    <button onclick="navigateTo('trip')" class="btn-secondary">
+                        <i class="fas fa-route mr-2"></i> Plan a Trip
+                    </button>
                 </div>
             </div>
 
-            <div id="message" class="text-center text-yellow-400 mb-4 text-lg"></div>
-
-            <div id="loader" class="hidden flex justify-center py-10">
-              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500"></div>
+            <!-- Quick Weather Search -->
+            <div class="max-w-2xl mx-auto mb-16 fade-in" style="animation-delay: 0.2s;">
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
+                        <input type="text" id="homeSearchInput"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder-white/40 focus:outline-none focus:border-cyan-400/50 focus:bg-white/10 transition-all"
+                            placeholder="Search any city for instant weather..."
+                        >
+                        <div id="homeSearchSuggestions" class="suggestions-dropdown hidden"></div>
+                    </div>
+                </div>
             </div>
 
+            <!-- Feature Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="glass-card rounded-2xl p-6 hover-lift fade-in" style="animation-delay: 0.3s;">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 flex items-center justify-center mb-4">
+                        <i class="fas fa-temperature-high text-cyan-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Real-Time Forecasting</h3>
+                    <p class="text-white/50 text-sm leading-relaxed">
+                        Accurate weather predictions with temperature, humidity, wind speed, and 5-day forecasts powered by AI models.
+                    </p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 hover-lift fade-in" style="animation-delay: 0.4s;">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center mb-4">
+                        <i class="fas fa-brain text-purple-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">AI Trip Planning</h3>
+                    <p class="text-white/50 text-sm leading-relaxed">
+                        Get intelligent trip itineraries, packing suggestions, and optimal travel dates based on weather conditions.
+                    </p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 hover-lift fade-in" style="animation-delay: 0.5s;">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-area text-amber-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Prediction Dashboard</h3>
+                    <p class="text-white/50 text-sm leading-relaxed">
+                        Visual analytics comparing predicted vs actual weather, confidence metrics, and personalized insights.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== PAGE: WEATHER FORECAST ===================== -->
+    <section id="page-weather" class="page-section pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Search Bar -->
+            <div class="max-w-xl mx-auto mb-8 fade-in">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
+                    <input type="text" id="cityInput"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-24 py-3.5 text-white placeholder-white/40 focus:outline-none focus:border-cyan-400/50 focus:bg-white/10 transition-all"
+                        placeholder="Enter city name..."
+                    >
+                    <button id="locationBtn" onclick="getUserLocation()"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg text-white text-sm font-medium hover:opacity-90 transition-opacity">
+                        <i class="fas fa-location-crosshairs mr-1"></i> Locate
+                    </button>
+                    <div id="weatherSearchSuggestions" class="suggestions-dropdown hidden"></div>
+                </div>
+            </div>
+
+            <!-- Favorites -->
+            <div id="favoritesContainer" class="mb-8 text-center hidden">
+                <div id="favoritesList" class="flex flex-wrap justify-center gap-2"></div>
+            </div>
+
+            <!-- Loader -->
+            <div id="loader" class="hidden flex justify-center py-16">
+                <div class="loader-spinner"></div>
+            </div>
+
+            <!-- Status Message -->
+            <div id="message" class="text-center mb-4 text-lg"></div>
+
+            <!-- Weather Content -->
             <div id="weatherContent" class="hidden">
-                <div class="fade-in grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-center mb-8 pt-12 md:pt-0">
-                    <div class="flex flex-col items-center md:items-start text-center md:text-left">
-                        <div class="flex items-center gap-3">
-                            <h1 id="cityName" class="text-4xl md:text-5xl font-extrabold text-dynamic-primary">--</h1>
-                            <button id="favoriteBtn" class="favorite-btn text-3xl transition-colors duration-300 hover:opacity-75"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></button>
+
+                <!-- Current Weather Card -->
+                <div class="glass-card rounded-2xl p-6 sm:p-8 mb-6 fade-in">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <!-- Left: City Info -->
+                        <div class="text-center lg:text-left">
+                            <div class="flex items-center justify-center lg:justify-start gap-3 mb-2">
+                                <h2 id="cityName" class="text-3xl sm:text-4xl font-extrabold text-white">--</h2>
+                                <button id="favoriteBtn" onclick="toggleFavorite()" class="favorite-btn text-2xl text-white/30 hover:text-amber-400 transition-colors">
+                                    <i class="far fa-star"></i>
+                                </button>
+                            </div>
+                            <p id="localTime" class="text-white/50 text-sm font-medium mb-1">--:-- --</p>
+                            <p id="currentDescription" class="text-cyan-300 text-lg capitalize mb-6">--</p>
+                            <p id="currentTemp" class="text-7xl sm:text-8xl font-black text-white leading-none mb-6">--°</p>
+
+                            <!-- Unit Toggle -->
+                            <div class="inline-flex items-center gap-2 bg-white/5 rounded-full px-4 py-2">
+                                <span id="unit-c" class="text-sm font-semibold text-cyan-400 cursor-pointer">°C</span>
+                                <label for="unit-switch" class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="unit-switch" class="sr-only peer">
+                                    <div class="w-9 h-5 bg-white/10 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-600"></div>
+                                </label>
+                                <span id="unit-f" class="text-sm font-semibold text-white/40 cursor-pointer">°F</span>
+                            </div>
                         </div>
-                        <p id="localTime" class="text-lg text-dynamic-secondary font-medium mt-2">--:-- --</p>
-                        <p id="currentDescription" class="text-dynamic-secondary text-xl capitalize mt-1">--</p>
-                        <p id="currentTemp" class="text-5xl md:text-8xl font-extrabold text-dynamic-primary mt-4">--°</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img id="currentIcon" src="https://placehold.co/160x160/00000000/ffffff?text=☀️" alt="Weather icon" class="w-32 h-32 sm:w-40 sm:h-40">
-                        <div class="grid grid-cols-3 gap-4 text-center mt-4 w-full max-w-xs">
-                            <div><p class="text-sm text-dynamic-accent">Feels Like</p><p id="feelsLike" class="font-bold text-lg text-dynamic-primary">--°</p></div>
-                            <div><p class="text-sm text-dynamic-accent">Humidity</p><p id="humidity" class="font-bold text-lg text-dynamic-primary">--%</p></div>
-                            <div><p class="text-sm text-dynamic-accent">Wind</p><p id="windSpeed" class="font-bold text-lg text-dynamic-primary">--</p></div>
+
+                        <!-- Right: Icon + Quick Stats -->
+                        <div class="flex flex-col items-center">
+                            <img id="currentIcon" src="https://openweathermap.org/img/wn/01d@4x.png" alt="Weather Icon" class="w-36 h-36 sm:w-44 sm:h-44 weather-icon-float">
+                            <div class="grid grid-cols-3 gap-4 w-full max-w-sm mt-4">
+                                <div class="stat-card">
+                                    <i class="fas fa-thermometer-half text-cyan-400 mb-1"></i>
+                                    <p class="text-xs text-white/40">Feels Like</p>
+                                    <p id="feelsLike" class="text-lg font-bold text-white">--°</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-droplet text-blue-400 mb-1"></i>
+                                    <p class="text-xs text-white/40">Humidity</p>
+                                    <p id="humidity" class="text-lg font-bold text-white">--%</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-wind text-teal-400 mb-1"></i>
+                                    <p class="text-xs text-white/40">Wind</p>
+                                    <p id="windSpeed" class="text-lg font-bold text-white">-- m/s</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sunrise/Sunset -->
-                <div class="fade-in grid grid-cols-2 gap-4 text-center mb-8" style="animation-delay: 0.1s;">
-                    <div class="flex items-center justify-center gap-2">
-                        <svg class="w-8 h-8 theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        <div>
-                            <p class="text-sm text-dynamic-accent">Sunrise</p>
-                            <p id="sunriseTime" class="font-bold text-lg text-dynamic-primary">--:--</p>
-                        </div>
+                <!-- Additional Weather Details -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 fade-in" style="animation-delay: 0.1s;">
+                    <div class="glass-card rounded-xl p-4 text-center">
+                        <i class="fas fa-sun text-amber-400 text-xl mb-2"></i>
+                        <p class="text-xs text-white/40">Sunrise</p>
+                        <p id="sunriseTime" class="text-base font-bold text-white">--:--</p>
                     </div>
-                     <div class="flex items-center justify-center gap-2">
-                        <svg class="w-8 h-8 theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                        <div>
-                            <p class="text-sm text-dynamic-accent">Sunset</p>
-                            <p id="sunsetTime" class="font-bold text-lg text-dynamic-primary">--:--</p>
-                        </div>
+                    <div class="glass-card rounded-xl p-4 text-center">
+                        <i class="fas fa-moon text-indigo-400 text-xl mb-2"></i>
+                        <p class="text-xs text-white/40">Sunset</p>
+                        <p id="sunsetTime" class="text-base font-bold text-white">--:--</p>
+                    </div>
+                    <div class="glass-card rounded-xl p-4 text-center">
+                        <i class="fas fa-gauge-high text-rose-400 text-xl mb-2"></i>
+                        <p class="text-xs text-white/40">Pressure</p>
+                        <p id="pressure" class="text-base font-bold text-white">-- hPa</p>
+                    </div>
+                    <div class="glass-card rounded-xl p-4 text-center">
+                        <i class="fas fa-eye text-emerald-400 text-xl mb-2"></i>
+                        <p class="text-xs text-white/40">Visibility</p>
+                        <p id="visibility" class="text-base font-bold text-white">-- km</p>
                     </div>
                 </div>
 
-                <div class="fade-in" style="animation-delay: 0.2s;">
-                    <h3 class="text-xl font-bold mb-4 text-dynamic-primary border-b divider pb-2">5-Day Forecast</h3>
-                    <div id="forecastContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4"></div>
+                <!-- 5-Day Forecast -->
+                <div class="glass-card rounded-2xl p-6 mb-6 fade-in" style="animation-delay: 0.2s;">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-calendar-week text-cyan-400"></i> 5-Day Forecast
+                    </h3>
+                    <div id="forecastContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3"></div>
+                </div>
+
+                <!-- Weather Trend Chart -->
+                <div class="glass-card rounded-2xl p-6 fade-in" style="animation-delay: 0.3s;">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-purple-400"></i> Temperature Trend
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="weatherChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- ===================== PAGE: AI TRIP PLANNER ===================== -->
+    <section id="page-trip" class="page-section pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10 fade-in">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">
+                    <i class="fas fa-route text-purple-400 mr-2"></i> AI Trip Planner
+                </h2>
+                <p class="text-white/50 max-w-xl mx-auto">
+                    Let Weatherly's AI plan the perfect trip based on weather conditions, your preferences, and budget.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <!-- Trip Input Panel (2 cols) -->
+                <div class="lg:col-span-2">
+                    <div class="glass-card rounded-2xl p-6 sticky top-24">
+                        <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                            <i class="fas fa-sliders text-cyan-400"></i> Trip Preferences
+                        </h3>
+                        <form id="tripForm" class="space-y-4">
+                            <div>
+                                <label class="input-label">Starting Location</label>
+                                <div class="relative">
+                                    <i class="fas fa-map-pin absolute left-3 top-1/2 -translate-y-1/2 text-white/30"></i>
+                                    <input type="text" id="tripFrom" class="form-input pl-10" placeholder="e.g., New Delhi">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="input-label">Destination</label>
+                                <div class="relative">
+                                    <i class="fas fa-location-dot absolute left-3 top-1/2 -translate-y-1/2 text-white/30"></i>
+                                    <input type="text" id="tripTo" class="form-input pl-10" placeholder="e.g., Manali">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="input-label">Start Date</label>
+                                    <input type="date" id="tripStartDate" class="form-input">
+                                </div>
+                                <div>
+                                    <label class="input-label">End Date</label>
+                                    <input type="date" id="tripEndDate" class="form-input">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="input-label">Budget Range</label>
+                                <select id="tripBudget" class="form-input">
+                                    <option value="budget">💰 Budget (Under ₹10,000)</option>
+                                    <option value="moderate" selected>💰💰 Moderate (₹10K - ₹30K)</option>
+                                    <option value="premium">💰💰💰 Premium (₹30K - ₹70K)</option>
+                                    <option value="luxury">✨ Luxury (₹70K+)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="input-label">Travel Preferences</label>
+                                <div class="flex flex-wrap gap-2" id="travelPrefs">
+                                    <button type="button" class="pref-tag" data-pref="adventure">🏔️ Adventure</button>
+                                    <button type="button" class="pref-tag" data-pref="relaxation">🧘 Relaxation</button>
+                                    <button type="button" class="pref-tag" data-pref="hill-station">⛰️ Hill Station</button>
+                                    <button type="button" class="pref-tag" data-pref="beach">🏖️ Beach</button>
+                                    <button type="button" class="pref-tag" data-pref="cultural">🕌 Cultural</button>
+                                    <button type="button" class="pref-tag" data-pref="wildlife">🦁 Wildlife</button>
+                                    <button type="button" class="pref-tag" data-pref="road-trip">🚗 Road Trip</button>
+                                    <button type="button" class="pref-tag" data-pref="foodie">🍜 Foodie</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full btn-primary mt-2">
+                                <i class="fas fa-wand-magic-sparkles mr-2"></i> Generate Trip Plan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- AI Output Section (3 cols) -->
+                <div class="lg:col-span-3 space-y-6" id="tripOutput">
+
+                    <!-- Placeholder State -->
+                    <div id="tripPlaceholder" class="glass-card rounded-2xl p-12 text-center">
+                        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center">
+                            <i class="fas fa-wand-magic-sparkles text-3xl text-purple-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Ready to Plan Your Trip?</h3>
+                        <p class="text-white/40">Fill in your preferences and let Weatherly's AI create the perfect itinerary with weather-optimized recommendations.</p>
+                    </div>
+
+                    <!-- Trip Loading State -->
+                    <div id="tripLoader" class="hidden glass-card rounded-2xl p-12 text-center">
+                        <div class="loader-spinner mx-auto mb-4"></div>
+                        <p class="text-white/60">Weatherly AI is generating your perfect trip plan...</p>
+                    </div>
+
+                    <!-- Trip Results (hidden by default) -->
+                    <div id="tripResults" class="hidden space-y-6">
+
+                        <!-- Destination Recommendation Card -->
+                        <div class="glass-card rounded-2xl p-6 border border-cyan-500/20">
+                            <div class="flex items-start gap-4">
+                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-map-location-dot text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-cyan-400 font-semibold uppercase tracking-wider mb-1">Recommended Destination</p>
+                                    <h3 id="tripDestName" class="text-2xl font-bold text-white mb-1">--</h3>
+                                    <p id="tripDestDesc" class="text-white/50 text-sm">--</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Weather Suitability + Best Time -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="glass-card rounded-xl p-5">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i class="fas fa-cloud-sun text-amber-400 text-lg"></i>
+                                    <p class="text-sm font-semibold text-white">Weather Suitability</p>
+                                </div>
+                                <div id="weatherSuitability" class="flex items-center gap-2">
+                                    <div class="suitability-bar">
+                                        <div class="suitability-fill" style="width: 0%"></div>
+                                    </div>
+                                    <span class="text-sm font-bold text-emerald-400">--%</span>
+                                </div>
+                                <p id="weatherSuitNote" class="text-xs text-white/40 mt-2">--</p>
+                            </div>
+                            <div class="glass-card rounded-xl p-5">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i class="fas fa-calendar-check text-emerald-400 text-lg"></i>
+                                    <p class="text-sm font-semibold text-white">Best Time to Visit</p>
+                                </div>
+                                <p id="bestTimeVisit" class="text-lg font-bold text-white">--</p>
+                                <p id="bestTimeNote" class="text-xs text-white/40 mt-1">--</p>
+                            </div>
+                        </div>
+
+                        <!-- Itinerary -->
+                        <div class="glass-card rounded-2xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <i class="fas fa-list-check text-cyan-400"></i> Suggested Itinerary
+                            </h3>
+                            <div id="itineraryList" class="space-y-3"></div>
+                        </div>
+
+                        <!-- Packing Suggestions -->
+                        <div class="glass-card rounded-2xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <i class="fas fa-suitcase-rolling text-amber-400"></i> Packing Suggestions
+                            </h3>
+                            <div id="packingList" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+                        </div>
+
+                        <!-- Estimated Cost -->
+                        <div class="glass-card rounded-2xl p-6 border border-emerald-500/20">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <i class="fas fa-indian-rupee-sign text-emerald-400"></i> Estimated Cost Breakdown
+                            </h3>
+                            <div id="costBreakdown" class="space-y-3"></div>
+                            <div class="border-t border-white/10 mt-4 pt-4 flex justify-between items-center">
+                                <span class="text-white font-bold">Total Estimated Cost</span>
+                                <span id="totalCost" class="text-2xl font-black text-emerald-400">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== PAGE: DASHBOARD ===================== -->
+    <section id="page-dashboard" class="page-section pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10 fade-in">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">
+                    <i class="fas fa-chart-line text-cyan-400 mr-2"></i> Dashboard
+                </h2>
+                <p class="text-white/50 max-w-xl mx-auto">
+                    Your personal Weatherly analytics, saved trips, and prediction insights.
+                </p>
+            </div>
+
+            <!-- Quick Stats Row -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 fade-in" style="animation-delay: 0.1s;">
+                <div class="glass-card rounded-xl p-5 text-center">
+                    <p class="text-3xl font-black text-cyan-400" id="dashSearchCount">0</p>
+                    <p class="text-xs text-white/40 mt-1">Searches</p>
+                </div>
+                <div class="glass-card rounded-xl p-5 text-center">
+                    <p class="text-3xl font-black text-purple-400" id="dashTripCount">0</p>
+                    <p class="text-xs text-white/40 mt-1">Trips Planned</p>
+                </div>
+                <div class="glass-card rounded-xl p-5 text-center">
+                    <p class="text-3xl font-black text-emerald-400" id="dashFavCount">0</p>
+                    <p class="text-xs text-white/40 mt-1">Saved Cities</p>
+                </div>
+                <div class="glass-card rounded-xl p-5 text-center">
+                    <p class="text-3xl font-black text-amber-400" id="dashAccuracy">92%</p>
+                    <p class="text-xs text-white/40 mt-1">AI Accuracy</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- Predicted vs Actual Chart -->
+                <div class="glass-card rounded-2xl p-6 fade-in" style="animation-delay: 0.2s;">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-scale-balanced text-cyan-400"></i> Predicted vs Actual Weather
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Prediction Confidence -->
+                <div class="glass-card rounded-2xl p-6 fade-in" style="animation-delay: 0.3s;">
+                    <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fas fa-bullseye text-purple-400"></i> Prediction Confidence
+                    </h3>
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between mb-1.5">
+                                <span class="text-sm text-white/60">Temperature</span>
+                                <span class="text-sm font-bold text-emerald-400">94%</span>
+                            </div>
+                            <div class="confidence-bar"><div class="confidence-fill bg-emerald-400" style="width: 94%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1.5">
+                                <span class="text-sm text-white/60">Humidity</span>
+                                <span class="text-sm font-bold text-blue-400">88%</span>
+                            </div>
+                            <div class="confidence-bar"><div class="confidence-fill bg-blue-400" style="width: 88%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1.5">
+                                <span class="text-sm text-white/60">Wind Speed</span>
+                                <span class="text-sm font-bold text-cyan-400">82%</span>
+                            </div>
+                            <div class="confidence-bar"><div class="confidence-fill bg-cyan-400" style="width: 82%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1.5">
+                                <span class="text-sm text-white/60">Precipitation</span>
+                                <span class="text-sm font-bold text-purple-400">76%</span>
+                            </div>
+                            <div class="confidence-bar"><div class="confidence-fill bg-purple-400" style="width: 76%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Searches -->
+                <div class="glass-card rounded-2xl p-6 fade-in" style="animation-delay: 0.4s;">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-clock-rotate-left text-amber-400"></i> Recent Searches
+                    </h3>
+                    <div id="recentSearchesList" class="space-y-2">
+                        <p class="text-white/30 text-sm text-center py-6">No recent searches yet.</p>
+                    </div>
+                </div>
+
+                <!-- Saved Trips -->
+                <div class="glass-card rounded-2xl p-6 fade-in" style="animation-delay: 0.5s;">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-bookmark text-emerald-400"></i> Saved Trips
+                    </h3>
+                    <div id="savedTripsList" class="space-y-2">
+                        <p class="text-white/30 text-sm text-center py-6">No saved trips yet. Plan your first trip!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== PAGE: ABOUT ===================== -->
+    <section id="page-about" class="page-section pt-24 pb-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">
+                    <i class="fas fa-info-circle text-cyan-400 mr-2"></i> About Weatherly
+                </h2>
+                <p class="text-white/50 max-w-xl mx-auto">
+                    A portfolio-grade AI-powered weather and trip planning application.
+                </p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="glass-card rounded-2xl p-8 fade-in" style="animation-delay: 0.1s;">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-bullseye text-cyan-400"></i> Project Overview
+                    </h3>
+                    <p class="text-white/60 leading-relaxed">
+                        Weatherly is a Machine Learning and AI-powered web application that combines real-time weather forecasting with intelligent trip planning. It uses the OpenWeatherMap API for weather data and provides AI-generated trip itineraries based on weather conditions, user preferences, and budget constraints. Built as a full-stack portfolio project demonstrating modern web development, data visualization, and AI integration.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 fade-in" style="animation-delay: 0.2s;">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fas fa-microchip text-purple-400"></i> Tech Stack
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="tech-badge"><i class="fab fa-html5 text-orange-400"></i> HTML5</div>
+                        <div class="tech-badge"><i class="fab fa-css3-alt text-blue-400"></i> CSS3</div>
+                        <div class="tech-badge"><i class="fab fa-js text-yellow-400"></i> JavaScript</div>
+                        <div class="tech-badge"><i class="fas fa-wind text-cyan-400"></i> Tailwind CSS</div>
+                        <div class="tech-badge"><i class="fas fa-chart-line text-emerald-400"></i> Chart.js</div>
+                        <div class="tech-badge"><i class="fas fa-cloud text-blue-300"></i> OpenWeatherMap</div>
+                        <div class="tech-badge"><i class="fas fa-brain text-purple-400"></i> AI/ML Models</div>
+                        <div class="tech-badge"><i class="fas fa-database text-amber-400"></i> LocalStorage</div>
+                        <div class="tech-badge"><i class="fas fa-mobile-screen text-rose-400"></i> Responsive Design</div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 fade-in" style="animation-delay: 0.3s;">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fas fa-star text-amber-400"></i> Key Features
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check text-cyan-400 text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm">Real-time Weather Data</p>
+                                <p class="text-white/40 text-xs">Live API integration with 5-day forecasts</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check text-purple-400 text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm">AI Trip Planning</p>
+                                <p class="text-white/40 text-xs">Intelligent itineraries based on weather</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check text-emerald-400 text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm">Data Visualization</p>
+                                <p class="text-white/40 text-xs">Interactive charts with Chart.js</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check text-amber-400 text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm">Dark/Light Themes</p>
+                                <p class="text-white/40 text-xs">Automatic day/night theme switching</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check text-rose-400 text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm">Responsive Design</p>
+                                <p class="text-white/40 text-xs">Fully optimized for all screen sizes</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check text-blue-400 text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm">Offline Support</p>
+                                <p class="text-white/40 text-xs">Cached data with localStorage</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 text-center fade-in" style="animation-delay: 0.4s;">
+                    <p class="text-white/40 text-sm mb-3">Built with ❤️ by</p>
+                    <h3 class="text-2xl font-bold text-white mb-2">TheBhaskarr</h3>
+                    <p class="text-white/40 text-sm mb-6">Full-Stack Developer & ML Enthusiast</p>
+                    <div class="flex justify-center gap-4">
+                        <a href="https://github.com/TheBhaskarr" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script defer src="config.js"></script>
     <script defer src="script.js"></script>
