@@ -6,20 +6,20 @@ This project demonstrates practical frontend development skills including API in
 
 ---
 
-## Features
+##  Features
 
--✅ Real-time weather data using OpenWeather API
--✅ Smart city autocomplete suggestions
--✅ Dynamic background based on weather conditions
--✅ Day / Night theme switching
--✅ Temperature unit toggle (°C / °F)
--✅ Animated weather effects (rain, transitions)
--✅ 5-day forecast display
--✅ Favorites system with local storage
--✅ Offline weather caching
--✅ Loading spinner for better UX
--✅ Responsive mobile-friendly design
--✅ Clean modular code structure (HTML / CSS / JS separated)
+- ✅ Real-time weather data using OpenWeather API  
+- ✅ Smart city autocomplete suggestions  
+- ✅ Dynamic background based on weather conditions  
+- ✅ Day / Night theme switching  
+- ✅ Temperature unit toggle (°C / °F)  
+- ✅ Animated weather effects (rain, transitions)  
+- ✅ 5-day forecast display  
+- ✅ Favorites system with local storage  
+- ✅ Offline weather caching  
+- ✅ Loading spinner for better UX  
+- ✅ Responsive mobile-friendly design  
+- ✅ Clean modular code structure (HTML / CSS / JS separated)
 
 ---
 
