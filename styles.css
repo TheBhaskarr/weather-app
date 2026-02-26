@@ -1,6 +1,5 @@
 /* ============================================
-   WEATHERLY — Modern AI SaaS Stylesheet
-   Complete Unified File (Day-Mode Contrast Fix)
+   AI WEATHER PLANNER — Modern AI SaaS Stylesheet
    ============================================ */
 
 /* --- Base & Reset --- */
@@ -25,9 +24,6 @@ body {
     color: #e2e8f0;
 }
 
-/* =============================================
-   THEME: DAY MODE — High Contrast Fix
-   ============================================= */
 .day-mode {
     background: linear-gradient(135deg, #c7d9f0 0%, #b8d4f0 30%, #cfc5f0 60%, #b5daf5 100%);
     color: #0f172a;
@@ -59,13 +55,7 @@ body {
     background: rgba(8, 145, 178, 0.12);
 }
 
-/* --- Day Mode Typography (strong contrast) --- */
-.day-mode h1,
-.day-mode h2,
-.day-mode h3 {
-    color: #0f172a !important;
-}
-
+.day-mode h1, .day-mode h2, .day-mode h3,
 .day-mode .text-white {
     color: #0f172a !important;
 }
@@ -334,61 +324,23 @@ body {
     color: #475569;
 }
 
-/* --- Day Mode Unit Toggle --- */
-.day-mode #unit-c,
-.day-mode #unit-f {
-    color: #334155 !important;
+.day-mode .suggestions-dropdown {
+    background: rgba(255, 255, 255, 0.95);
 }
 
-/* --- Day Mode Favorite City Tags --- */
-.day-mode #favoritesList button {
-    background: rgba(255, 255, 255, 0.7) !important;
-    border-color: #94a3b8 !important;
-    color: #1e293b !important;
+.day-mode .suggestion-item:hover {
+    background: #f1f5f9;
 }
 
-.day-mode #favoritesList button:hover {
-    background: rgba(255, 255, 255, 0.95) !important;
+.day-mode .confidence-bar {
+    background: rgba(0, 0, 0, 0.06);
 }
 
-/* --- Day Mode Favorite Star --- */
-.day-mode .favorite-btn {
-    color: #94a3b8 !important;
+.day-mode .suitability-bar {
+    background: rgba(0, 0, 0, 0.06);
 }
 
-.day-mode .favorite-btn:hover,
-.day-mode .favorite-btn.text-amber-400 {
-    color: #d97706 !important;
-}
-
-/* --- Day Mode Message Text --- */
-.day-mode #message {
-    color: #b45309 !important;
-}
-
-/* --- Day Mode Scrollbar --- */
-.day-mode ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.12);
-}
-
-.day-mode ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.2);
-}
-
-/* --- Day Mode Selection --- */
-.day-mode ::selection {
-    background: rgba(8, 145, 178, 0.25);
-    color: #0f172a;
-}
-
-/* --- Day Mode Hamburger Icon --- */
-.day-mode .fa-bars {
-    color: #334155 !important;
-}
-
-/* =============================================
-   NAVBAR
-   ============================================= */
+/* --- Navbar --- */
 .navbar-glass {
     background: rgba(10, 15, 26, 0.7);
     backdrop-filter: blur(20px);
@@ -898,27 +850,15 @@ select.form-input {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* =============================================
-   TEXT SELECTION
-   ============================================= */
+/* --- Selection --- */
 ::selection {
     background: rgba(34, 211, 238, 0.3);
     color: #fff;
 }
 
-/* =============================================
-   UTILITY: GRADIENT TEXT HELPER
-   ============================================= */
-.gradient-text {
-    background: linear-gradient(135deg, #22d3ee, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
+/* ===================== RESPONSIVE ===================== */
 
-/* =============================================
-   RESPONSIVE — TABLET (max-width: 1024px)
-   ============================================= */
+/* Tablet */
 @media (max-width: 1024px) {
     .chart-container {
         height: 220px;
